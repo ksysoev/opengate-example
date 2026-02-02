@@ -460,7 +460,7 @@ Resources:
           HealthCheck:
             Command:
               - CMD-SHELL
-              - !Sub wget --quiet --tries=1 --spider http://localhost:${ContainerPort}${HealthCheckPath} || exit 1
+              - !Sub curl -f http://localhost:${ContainerPort}${HealthCheckPath} || exit 1
             Interval: 30
             Timeout: 5
             Retries: 3
