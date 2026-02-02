@@ -457,14 +457,6 @@ Resources:
               awslogs-group: !Ref LogGroup
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: opengate
-          HealthCheck:
-            Command:
-              - CMD-SHELL
-              - !Sub curl -f http://localhost:${ContainerPort}${HealthCheckPath} || exit 1
-            Interval: 30
-            Timeout: 5
-            Retries: 3
-            StartPeriod: 60
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-task
