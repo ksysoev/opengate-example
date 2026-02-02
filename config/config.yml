@@ -1,0 +1,23 @@
+# OpenGate Configuration
+# This configuration file sets up the API gateway to forward requests
+
+api:
+  # Address to listen on
+  listen: :8080
+
+gateway:
+  # Path to OpenAPI specification file
+  spec_path: /config/gateway.json
+
+# HTTP client configuration for backend requests
+http:
+  # Request timeout
+  timeout: 30s
+  # Maximum idle connections across all hosts
+  max_idle_conns: 100
+  # Maximum connections per host
+  max_conns_per_host: 10
+  # How long idle connections stay open
+  idle_conn_timeout: 90s
+  # Keep HTTP connections alive for better performance
+  disable_keep_alives: false

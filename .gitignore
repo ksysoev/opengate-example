@@ -1,0 +1,27 @@
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Environment files (if you add secrets)
+.env
+.env.local
+*.key
+*.pem
+
+# Backup files
+*.bak
+*.backup
+
+# OS files
+Thumbs.db

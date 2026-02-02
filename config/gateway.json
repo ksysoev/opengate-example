@@ -1,0 +1,352 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "JSONPlaceholder Gateway API",
+    "version": "1.0.0",
+    "description": "OpenGate API Gateway proxying requests to JSONPlaceholder - a free fake API for testing and prototyping"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local OpenGate gateway"
+    }
+  ],
+  "paths": {
+    "/posts": {
+      "get": {
+        "summary": "Get all posts",
+        "description": "Retrieves a list of all posts from JSONPlaceholder",
+        "operationId": "get-posts",
+        "tags": ["Posts"],
+        "x-opengate": {
+          "type": "forward",
+          "options": {
+            "url": "https://jsonplaceholder.typicode.com"
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userId": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "body": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new post",
+        "description": "Creates a new post in JSONPlaceholder (fake operation - no actual data is stored)",
+        "operationId": "create-post",
+        "tags": ["Posts"],
+        "x-opengate": {
+          "type": "forward",
+          "options": {
+            "url": "https://jsonplaceholder.typicode.com"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Post created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "get": {
+        "summary": "Get post by ID",
+        "description": "Retrieves a specific post by its ID from JSONPlaceholder",
+        "operationId": "get-post-by-id",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the post to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "x-opengate": {
+          "type": "forward",
+          "options": {
+            "url": "https://jsonplaceholder.typicode.com"
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all users",
+        "description": "Retrieves a list of all users from JSONPlaceholder",
+        "operationId": "get-users",
+        "tags": ["Users"],
+        "x-opengate": {
+          "type": "forward",
+          "options": {
+            "url": "https://jsonplaceholder.typicode.com"
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "username": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get user by ID",
+        "description": "Retrieves a specific user by their ID from JSONPlaceholder",
+        "operationId": "get-user-by-id",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to retrieve",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "x-opengate": {
+          "type": "forward",
+          "options": {
+            "url": "https://jsonplaceholder.typicode.com"
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "object"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "website": {
+                      "type": "string"
+                    },
+                    "company": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/comments": {
+      "get": {
+        "summary": "Get comments",
+        "description": "Retrieves comments, optionally filtered by post ID using query parameters",
+        "operationId": "get-comments",
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "query",
+            "required": false,
+            "description": "Filter comments by post ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "x-opengate": {
+          "type": "forward",
+          "options": {
+            "url": "https://jsonplaceholder.typicode.com"
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of comments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "postId": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "body": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Posts",
+      "description": "Operations related to blog posts"
+    },
+    {
+      "name": "Users",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "Comments",
+      "description": "Operations related to comments"
+    }
+  ]
+}
