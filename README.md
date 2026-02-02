@@ -14,6 +14,7 @@ OpenGate is a production-ready API gateway that uses OpenAPI specifications for 
 
 - **Zero-code gateway deployment** - Pure configuration, no programming required
 - **Docker-based deployment** - Build on top of OpenGate's official Docker image
+- **AWS cloud deployment** - Production-ready infrastructure with SAM/CloudFormation
 - **Request forwarding** - Proxy requests from gateway to backend services
 - **Path parameters** - Dynamic route matching (e.g., `/posts/{id}`)
 - **Query parameters** - Pass-through query string parameters
@@ -301,7 +302,7 @@ For production, consider:
 1. **Use the published Docker image:**
 
 ```dockerfile
-FROM ghcr.io/ksysoev/opengate-example:latest
+FROM ghcr.io/ksysoev/opengate-example:main
 ```
 
 2. **Configure health checks:**
@@ -394,6 +395,147 @@ spec:
   selector:
     app: opengate-example
 ```
+
+### AWS Deployment (Fargate + ALB)
+
+Deploy OpenGate to AWS using SAM (Serverless Application Model) with ECS Fargate and Application Load Balancer.
+
+#### Architecture
+
+The AWS deployment creates:
+- **VPC** with public and private subnets across 2 availability zones
+- **Application Load Balancer** (internet-facing) with HTTP listener
+- **ECS Fargate** cluster running OpenGate containers in private subnets
+- **NAT Gateway** for outbound internet access from containers
+- **CloudWatch Logs** for container logging and monitoring
+
+#### Prerequisites
+
+- [AWS CLI](https://aws.amazon.com/cli/) v2.x or later
+- [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html) v1.x or later
+- AWS account with configured credentials (`aws configure`)
+
+#### Quick Deploy
+
+```bash
+# Using the deploy script (recommended)
+./deploy.sh --guided
+
+# Or using SAM CLI directly
+sam deploy --guided
+```
+
+On first deployment, you'll be prompted for:
+- **Stack name** (default: `opengate-example`)
+- **AWS Region** (default: `us-east-1`)
+- **Parameters** (task count, CPU, memory, etc.)
+
+The deployment takes approximately 8-10 minutes to complete.
+
+#### Deployment Files
+
+- `template.yaml` - CloudFormation/SAM template with full infrastructure
+- `samconfig.toml` - SAM CLI configuration with default parameters
+- `deploy.sh` - Automated deployment script with validation and testing
+
+#### Access Your Deployment
+
+After successful deployment, you'll receive an ALB URL:
+
+```
+http://opengate-example-alb-XXXXXXXXXX.us-east-1.elb.amazonaws.com
+```
+
+Test the endpoints:
+```bash
+# Get all posts
+curl http://your-alb-url.elb.amazonaws.com/posts
+
+# Get specific post
+curl http://your-alb-url.elb.amazonaws.com/posts/1
+
+# Get all users
+curl http://your-alb-url.elb.amazonaws.com/users
+```
+
+#### Configuration Options
+
+Customize deployment by editing `samconfig.toml`:
+
+```toml
+parameter_overrides = [
+  "Environment=production",
+  "TaskCount=2",              # Number of Fargate tasks
+  "TaskCpu=512",              # CPU units (256, 512, 1024, etc.)
+  "TaskMemory=1024",          # Memory in MB
+  "HealthCheckPath=/posts"    # Health check endpoint
+]
+```
+
+Or override via command line:
+```bash
+sam deploy --parameter-overrides TaskCount=3 TaskCpu=1024
+```
+
+#### Management Commands
+
+**View logs:**
+```bash
+sam logs --stack-name opengate-example --tail
+
+# Or using AWS CLI
+aws logs tail /ecs/opengate-example --follow
+```
+
+**Update deployment:**
+```bash
+sam deploy
+```
+
+**Scale service:**
+```bash
+# Update TaskCount in samconfig.toml, then:
+sam deploy
+```
+
+**Delete deployment (stop all charges):**
+```bash
+sam delete --stack-name opengate-example
+```
+
+#### Cost Estimation
+
+Monthly costs (us-east-1 region):
+- **NAT Gateway**: ~$32/month (largest cost)
+- **Application Load Balancer**: ~$16-25/month
+- **Fargate** (1 task, 0.5 vCPU, 1 GB): ~$16/month
+- **CloudWatch Logs**: ~$1-5/month
+- **Total**: ~$65-75/month
+
+To minimize costs:
+- Delete the stack when not in use
+- Reduce task count during off-peak hours
+- Use smaller task sizes for testing
+
+#### Advanced Features
+
+**Auto-scaling** - Scale based on CPU/memory:
+```yaml
+# Add to template.yaml (see full example in template file)
+ScalableTarget:
+  Type: AWS::ApplicationAutoScaling::ScalableTarget
+  Properties:
+    MinCapacity: 1
+    MaxCapacity: 4
+```
+
+**HTTPS Support** - Requires custom domain and ACM certificate:
+1. Register domain (Route53 or external registrar)
+2. Request ACM certificate for your domain
+3. Add HTTPS listener to ALB (443)
+4. Point domain to ALB via Route53 A record
+
+See `template.yaml` for complete infrastructure-as-code definition.
 
 ## Testing
 
