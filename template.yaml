@@ -25,7 +25,7 @@ Parameters:
   
   ContainerImage:
     Type: String
-    Default: ghcr.io/ksysoev/opengate-example:latest
+    Default: ghcr.io/ksysoev/opengate-example:main
     Description: Docker image to deploy
   
   ContainerPort:
