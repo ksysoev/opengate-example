@@ -1,7 +1,7 @@
 # OpenGate Example Dockerfile
 # This builds on top of the official OpenGate image and adds configuration
 
-FROM ghcr.io/ksysoev/opengate:latest
+FROM ghcr.io/ksysoev/opengate:main
 
 # Copy configuration files into the container
 COPY config/config.yml /config/config.yml
