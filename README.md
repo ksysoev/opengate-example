@@ -63,7 +63,7 @@ git clone https://github.com/ksysoev/opengate-example.git
 cd opengate-example
 
 # 2. Start the gateway
-docker-compose up -d
+docker compose up -d
 
 # 3. Test it!
 curl http://localhost:8080/posts/1
@@ -174,7 +174,7 @@ opengate-example/
 │   ├── config.yml          # OpenGate configuration
 │   └── gateway.json        # OpenAPI specification with routes
 ├── Dockerfile              # Build on top of OpenGate image
-└── docker-compose.yml      # Easy local deployment
+└── docker compose.yml      # Easy local deployment
 ```
 
 ### OpenGate Configuration (config/config.yml)
@@ -243,7 +243,7 @@ To proxy to your own API instead of JSONPlaceholder:
 3. Restart the gateway:
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### Add New Endpoints
@@ -251,7 +251,7 @@ docker-compose restart
 1. Edit `config/gateway.json`
 2. Add a new path entry following the OpenAPI 3.x format
 3. Include the `x-opengate` extension with forwarding configuration
-4. Restart: `docker-compose restart`
+4. Restart: `docker compose restart`
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
 
@@ -260,19 +260,19 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
 To run on a different port (e.g., 9090):
 
 ```bash
-# Edit docker-compose.yml, change ports section to:
+# Edit docker compose.yml, change ports section to:
 ports:
   - "9090:8080"
 
 # Or use environment variable
-PORT=9090 docker-compose up -d
+PORT=9090 docker compose up -d
 ```
 
 ### Adjust Log Level
 
 ```bash
 # Set LOG_LEVEL environment variable
-LOG_LEVEL=debug docker-compose up -d
+LOG_LEVEL=debug docker compose up -d
 ```
 
 Available levels: `debug`, `info`, `warn`, `error`
@@ -283,16 +283,16 @@ Available levels: `debug`, `info`, `warn`, `error`
 
 ```bash
 # Start in foreground (see logs)
-docker-compose up
+docker compose up
 
 # Start in background
-docker-compose up -d
+docker compose up -d
 
 # View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Stop
-docker-compose down
+docker compose down
 ```
 
 ### Production Deployment
@@ -307,7 +307,7 @@ FROM ghcr.io/ksysoev/opengate-example:main
 
 2. **Configure health checks:**
 
-Already included in `docker-compose.yml`:
+Already included in `docker compose.yml`:
 ```yaml
 healthcheck:
   test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/posts"]
@@ -570,11 +570,11 @@ All tests passed!
 
 **Check logs:**
 ```bash
-docker-compose logs opengate
+docker compose logs opengate
 ```
 
 **Common issues:**
-- Port 8080 already in use → Change port in `docker-compose.yml`
+- Port 8080 already in use → Change port in `docker compose.yml`
 - Configuration file syntax error → Validate YAML/JSON
 - Can't pull image → Check Docker Hub access
 
@@ -583,7 +583,7 @@ docker-compose logs opengate
 **Check the OpenAPI spec:**
 ```bash
 # Verify routes are loaded
-docker-compose logs opengate | grep "Loaded routes"
+docker compose logs opengate | grep "Loaded routes"
 ```
 
 Should show: `Loaded routes from OpenAPI spec count=6`
@@ -602,7 +602,7 @@ curl https://jsonplaceholder.typicode.com/posts/1
 
 **Check gateway logs for errors:**
 ```bash
-docker-compose logs opengate | grep error
+docker compose logs opengate | grep error
 ```
 
 ### Live config updates not working
@@ -612,7 +612,7 @@ The config directory is mounted as read-only. To update:
 1. Edit `config/gateway.json`
 2. Restart the container:
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ## Performance Tuning

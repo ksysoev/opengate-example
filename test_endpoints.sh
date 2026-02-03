@@ -62,7 +62,7 @@ for i in {1..30}; do
 	fi
 	if [ $i -eq 30 ]; then
 		echo -e "${RED}Gateway failed to start after 30 seconds${NC}"
-		echo "Please ensure the gateway is running: docker-compose up -d"
+		echo "Please ensure the gateway is running: docker compose up -d"
 		exit 1
 	fi
 	sleep 1

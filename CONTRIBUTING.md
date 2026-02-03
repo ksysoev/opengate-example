@@ -69,7 +69,7 @@ To add a new endpoint to the gateway:
 4. **Restart the gateway:**
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 5. **Test your endpoint:**
@@ -166,7 +166,7 @@ To use a different backend instead of JSONPlaceholder:
 4. **Restart:**
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### Modifying Gateway Configuration
@@ -180,7 +180,7 @@ api:
   listen: :9090  # Change from :8080 to :9090
 ```
 
-Don't forget to update `docker-compose.yml` ports section too.
+Don't forget to update `docker compose.yml` ports section too.
 
 #### Adjust Timeouts
 
@@ -220,7 +220,7 @@ docker run -p 8080:8080 your-username/opengate-custom:latest
 docker push your-username/opengate-custom:latest
 ```
 
-4. **Update docker-compose.yml:**
+4. **Update docker compose.yml:**
 
 ```yaml
 services:
@@ -235,7 +235,7 @@ services:
 
 ```bash
 # Start the gateway
-docker-compose up -d
+docker compose up -d
 
 # Test each endpoint
 curl http://localhost:8080/posts
@@ -243,7 +243,7 @@ curl http://localhost:8080/posts/1
 curl http://localhost:8080/users
 
 # Check logs
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ### Automated Testing
